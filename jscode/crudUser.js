@@ -101,32 +101,17 @@ export async function updateUser(allData, data) {
 
 // Xoá người dùng
 export async function deleteUser(allData, id) {
-console.log(id);
-  // fetch(`${baseUrl}/users/${userId}`, {
-  //   method: 'DELETE'
-  // })
-  //   .then(() => {
-  //     const userData = allData.find(d => d.endpoint === 'users');
-  //     if (userData) {
-  //       userData.data = userData.data.filter(u => u.id !== userId);
-  //     }
-
-  //     alert(`Đã xoá người dùng có ID = ${userId}`);
-  //     renderSearchResults(allData, 'users');
-  //   })
-  //   .catch(err => {
-  //     console.error('Lỗi khi xoá người dùng:', err);
-  //     alert('Lỗi khi xoá người dùng');
-  //   });
+  const userId = parseInt(id);
 
   try {
-    await fetch(`${baseUrl}/users/${id}`, {
+    await fetch(`${baseUrl}/users/${userId}`, {
       method: 'DELETE'
     });
 
     const userData = allData.find(d => d.endpoint === 'users');
     if (userData) {
       userData.data = userData.data.filter(u => u.id !== userId);
+      console.log('Sau khi xoá userData.data:', userData.data);
     }
 
     await showAlert(`Đã xoá người dùng có ID = ${userId}`);
