@@ -162,11 +162,11 @@ function handleSave() {
 
   switch (currentTab) {
     case 'posts':    hasId ? updatePost(allData,id, data)    : createPost(allData, data); break;
-    case 'comments': hasId ? updateComment(allData,id , data) : addComment(allData, data); break;
+    case 'comments': hasId ? updateComment(allData, data) : addComment(allData, data); break;
     case 'users':    hasId ? updateUser(allData, data)    : addUser(allData, data); break;
-    case 'albums':   hasId ? updateAlbum(allData,id , data)   : addAlbum(allData, data); break;
-    case 'todos':    hasId ? updateTodo(allData,id , data)    : addTodo(allData, data); break;
-    case 'photos':   hasId ? updatePhoto(allData,id , data)   : addPhoto(allData, data); break;
+    case 'albums':   hasId ? updateAlbum(allData, data)   : addAlbum(allData, data); break;
+    case 'todos':    hasId ? updateTodo(allData, data)    : addTodo(allData, data); break;
+    case 'photos':   hasId ? updatePhoto(allData, data)   : addPhoto(allData, data); break;
   }
 
   document.getElementById('modal').classList.add('hidden');
