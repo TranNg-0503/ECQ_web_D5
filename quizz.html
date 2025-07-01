@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <tittle>QUIZZZ</tittle>
+        <style> 
+            body {
+                font-family: Arial, sans-serif;
+                background: #f9f9f9;
+                padding: 20px;
+            }
+            #quiz-container {
+                text-align: center;
+                background: #ffb9b9;
+                padding: 20px;
+                max-width: 500px;
+                margin: auto;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+            h2 {
+                color: #421f1f;
+            }
+
+            .option {
+                background: #eee;
+                padding: 10px;
+                margin: 5px 0;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+            .score {
+                font-weight: bold;
+                font-size: 20px;
+                margin-top: 20px;
+                text-align:center;
+            }
+
+            button {
+                margin-top: 15px;
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+
+            .review-option {
+                padding: 5px;
+                border: 1px solid #ccc;
+                margin-top: 4px;
+                border-radius: 4px;
+            }
+            .correct {
+                background-color: #d4edda; /* xanh lá */
+            }
+            .wrong {
+                background-color: #f8d7da; /* hồng nhạt */
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <div id="quiz-container">
+            <h2 id="question">Câu hỏi sẽ hiển thị ở đây</h2>
+            <div id="options"></div>
+            <div class="score" id="score"></div>
+        </div>
+
+    <script>
+        function Question(text, options, correctIndex) {
+            this.text = text;
+            this.options = options;
+            this.correctIndex = correctIndex;
+        }
+
+        Question.prototype.checkAnswer = function(index) {
+        return index === this.correctIndex;
+        };
+
+        function Quiz(questions) {
+            this.questions = questions;
+            this.currentIndex = 0;
+            this.score = 0;
+            this.Answer=false;
+        }
+
+        Quiz.prototype.getCurrentQuestion = function() {
+        return this.questions[this.currentIndex];
+        };
+
+        Quiz.prototype.checkAnswer = function(index) {
+            const currentQuestion = this.getCurrentQuestion();
+            currentQuestion.myAnswer = index;
+            if (currentQuestion.checkAnswer(index)) {
+            this.score++;
+            }
+            this.currentIndex++;
+            this.render();
+        };
+
+        Quiz.prototype.nextQuestion = function() {
+            this.currentIndex++;
+            this.render();
+        };
+
+        Quiz.prototype.render = function() {
+            const questionEl = document.getElementById("question");
+            const optionsEl = document.getElementById("options");
+            const scoreEl = document.getElementById("score");
+
+            if (this.currentIndex >= this.questions.length) {
+                questionEl.textContent = "Bạn đã hoàn thành!";
+                optionsEl.innerHTML = "";
+                scoreEl.textContent = `Điểm nè: ${this.score}/${this.questions.length}`;
+
+                this.renderReview();
+
+            return;
+            }
+
+            const currentQ = this.getCurrentQuestion();
+            questionEl.textContent = currentQ.text;
+            optionsEl.innerHTML = "";
+
+            currentQ.options.forEach((option, i) => {
+                const div = document.createElement("div");
+                div.className = "option";
+                div.textContent = option;
+                div.onclick = () => this.checkAnswer(i);
+                optionsEl.appendChild(div);
+            });
+
+        scoreEl.textContent = `Câu ${this.currentIndex + 1} / ${this.questions.length}`;
+    };
+
+    Quiz.prototype.renderReview = function() {
+    const optionsEl = document.getElementById("options");
+
+    this.questions.forEach((q, i) => {
+        const questionReview = document.createElement("div");
+        questionReview.style.marginTop = "20px";
+        questionReview.innerHTML = `<strong>${i + 1}. ${q.text}</strong>`;
+
+        q.options.forEach((opt, idx) => {
+            const answerDiv = document.createElement("div");
+            answerDiv.textContent = opt;
+            answerDiv.className = "review-option";
+
+            if (idx === q.correctIndex) {
+                answerDiv.classList.add("correct");
+            }
+
+            if (q.myAnswer === idx && idx !== q.correctIndex) {
+                answerDiv.classList.add("wrong");
+            }
+
+            questionReview.appendChild(answerDiv);
+        });
+
+        optionsEl.appendChild(questionReview);
+    });
+};
+
+    // Danh sách câu hỏi
+    const questions = [
+        new Question("1. Thủ đô của Việt Nam là?", ["Hà Nội", "TP. HCM", "Đà Nẵng", "Huế"], 0),
+        new Question("2. 2 + 2 =?", ["3", "4", "5", "6"], 1),
+        new Question("3. Mấy giờ tan làm?", ["17h", "19h", "18h", "20h"], 2)
+    ];
+
+    const quizApp = new Quiz(questions);
+    quizApp.render();
+    </script>
+
+    </body>
+    </style>
+    </head>
+</html>
